@@ -16,7 +16,7 @@ class MinimalDriver(Node):
         self.i = 0
         self.state = 0
 
-        self.angular_rate = (90 * (math.pi / 180)) * 1.2
+        self.angular_rate = (90 * (math.pi / 180))
 
     def timer_callback(self):
         msg = Twist()
@@ -30,9 +30,10 @@ class MinimalDriver(Node):
         # msg.angular.z = 1.0
         self.publisher.publish(msg)
         print("Squaring: {}, {}, {}".format(self.i % 10, self.state, self.i), end="\r", flush=True)
-        if self.i % 10 == 0:
+        if self.i == 11:
             self.state = (self.state + 1) if self.state != 4 else 0
             # self.state = 0 if self.state == 1 else 1
+            self.i = 0
 
 def main(args=None):
     rclpy.init(args=args)

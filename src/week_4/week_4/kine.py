@@ -113,6 +113,7 @@ class ControlStrategy(Node):
         msg = Twist()
         msg.linear.x = v
         msg.angular.z = w
+        print(v, w)
         self.control_pub.publish(msg)
         return   
 

@@ -13,38 +13,10 @@ import numpy as np
 
 from std_msgs.msg import String
 
-class OpencvBridge(Node):
-    """
-    A class that demonstrates how to use the ROS2 CVBridge for image processing.
-
-    This class sets up the necessary subscriptions and provides a callback function
-    for processing camera data. It converts ROS Image messages to OpenCV images,
-    performs various image processing operations, and displays the results.
-
-    Attributes:
-        br: CvBridge object for converting ROS Image messages to OpenCV images.
-
-    Subscriptions:
-        /limo/depth_camera_link/image_raw: ROS Image topic for receiving camera data.
-
-    Published Topics:
-        None
-
-    """
+class VisionHandler(Node):
 
     def __init__(self):
-        """
-        Initializes the OpencvBridge class.
-
-        This method sets up the necessary subscriptions and initializes the CvBridge object.
-
-        Args:
-            None
-
-        Returns:
-            None
-        """
-        super().__init__('opencv_bridge')
+        super().__init__('project_vision')
         self.create_subscription(Image, '/limo/depth_camera_link/image_raw', self.camera_callback, 10)
         # self.create_subscription(Image, '/camera/color/image_raw', self.camera_callback, 10)
 
@@ -53,23 +25,16 @@ class OpencvBridge(Node):
         self.publisher_ = self.create_publisher(String, '/camera_info', 1);
         self.timer = self.create_timer(1.0, self.timer_callback)
         self.frame_mean = 0.0
+        self.get_logger().info(f"Vision node started.")
 
     def camera_callback(self, data):
-        """
-        Callback function for processing camera data.
 
-        Args:
-            data: ROS Image message containing camera data.
-
-        Returns:
-            None
-        """
         # cv2.namedWindow("Image window")
         # cv2.namedWindow("blur")
         # cv2.namedWindow("canny")
-        cv2.namedWindow("Feed")
-        cv2.namedWindow("CurrentFrameHSV")
-        cv2.namedWindow("Masked")
+        # cv2.namedWindow("Feed")
+        # cv2.namedWindow("CurrentFrameHSV")
+        # cv2.namedWindow("Masked")
 
         # Convert ROS Image message to OpenCV image
         # cv_image = self.br.imgmsg_to_cv2(data, desired_encoding='bgr8')
@@ -88,24 +53,20 @@ class OpencvBridge(Node):
 
         # cv_image_small = cv2.resize(cv_image, (0,0), fx=0.2, fy=0.2) # reduce image size
         # cv2.imshow("Image window", cv_image_small)
-        cv_image = self.br.imgmsg_to_cv2(data, desired_encoding='bgr8')
-        cv2.imshow("Feed", cv_image)
-        current_frame_hsv = cv2.cvtColor(cv_image, cv2.COLOR_BGR2HSV)
-        current_frame_resize = cv2.resize(current_frame_hsv, (0,0), fx=0.5, fy=0.5)
-        cv2.imshow("CurrentFrameHSV", current_frame_resize)
-        current_frame_mask = cv2.inRange(current_frame_hsv, np.array((0, 150, 50)),
-            np.array((255, 255, 255)))
-        cv2.imshow("Masked", current_frame_mask)
 
-        hsv_thresh = cv2.inRange(current_frame_hsv,
-            np.array((0, 150, 50)),
-            np.array((255, 255, 255)))
-        # self.frame_mean = (
-        #     cv2.mean(current_frame_hsv[:, :, 0], mask = hsv_thresh)[0],
-        #     cv2.mean(current_frame_hsv[:, :, 1], mask = hsv_thresh)[0],
-        #     cv2.mean(current_frame_hsv[:, :, 2], mask = hsv_thresh)[0]
-        # )
-        
+        # cv_image = self.br.imgmsg_to_cv2(data, desired_encoding='bgr8')
+        # cv2.imshow("Feed", cv_image)
+        # current_frame_hsv = cv2.cvtColor(cv_image, cv2.COLOR_BGR2HSV)
+        # current_frame_resize = cv2.resize(current_frame_hsv, (0,0), fx=0.5, fy=0.5)
+        # cv2.imshow("CurrentFrameHSV", current_frame_resize)
+        # current_frame_mask = cv2.inRange(current_frame_hsv, np.array((0, 150, 50)),
+        #     np.array((255, 255, 255)))
+        # cv2.imshow("Masked", current_frame_mask)
+
+        # hsv_thresh = cv2.inRange(current_frame_hsv,
+        #     np.array((0, 150, 50)),
+        #     np.array((255, 255, 255)))
+
         
         cv2.waitKey(1)
 
@@ -116,11 +77,11 @@ class OpencvBridge(Node):
         self.publisher_.publish(msg)
 
 def main(args=None):
-    print('Starting opencv_bridge.py.')
+    print('Starting Vision...')
 
     rclpy.init(args=args)
 
-    opencv_bridge = OpencvBridge()
+    opencv_bridge = VisionHandler()
 
     rclpy.spin(opencv_bridge)
 

@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'my_driver'
+package_name = 'project'
 
 setup(
     name=package_name,
@@ -16,10 +16,11 @@ setup(
     maintainer='lcas',
     maintainer_email='student@socstech.support',
     description='TODO: Package description',
-    license='TODO: License declaration',
+    license='Apache-2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'vision = project.vision:main'
         ],
     },
 )

@@ -294,10 +294,10 @@ def main(args=None):
     # control_strategy.inter_direction_diff_drive_init(r_distance=0.6
     #                 , refPose=np.array([1.0,1.0,0]), k_p=0.1, k_w=0.5, dmin=0.7)
     control_strategy.inter_point_diff_drive_init(
-        r_distance=0.5, refPose=np.array([0, -1, -10]), k_p=0.1, k_w=0.5, dmin=0.7
+        r_distance=0.5, refPose=np.array([1, 1, 0]), k_p=0.1, k_w=0.5, dmin=0.7
     )
     control_strategy.inter_direction_diff_drive_init(
-        r_distance=0.5, refPose=np.array([0, -1, -10]), k_p=0.1, k_w=0.5, dmin=0.7
+        r_distance=0.5, refPose=np.array([2, 2, -1]), k_p=0.1, k_w=0.5, dmin=0.7
     )
     while rclpy.ok():
         try:
